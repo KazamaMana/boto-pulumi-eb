@@ -1,0 +1,10 @@
+{
+    "AUTH_KEY": "1vv&izlZlk`Ok-?e;:G`Cd2i7RQ5~<FVp*Il3,_]fO+bqAo-$9#!W: kF}k5B&?y",
+    "SECURE_AUTH_KEY": "rhqAyQVAGWn_2(Hu*@IRfBx=%l*Kxs.k#MyBJ/_HoNU+AZ&U$^sMr-,q{)i.H[~@",
+    "LOGGED_IN_KEY": "rT LiRUR1+^KNw(;|&cK!#Ys3+ CYsUud.B3$|#,RF5:eU~3<(^l-.`!LoIxiAef",
+    "NONCE_KEY": "xBTb|h<y<^UgTC]<=m:FBVv2kN!>ys+Y$`^k2)M#ZO*j:k3pL!cDuF+2.Z&./`Pj",
+    "AUTH_SALT": "es|59*XpK9xl#7i0WtB|o$Jc@Yv<O*kLSx+%MYW^31uw$5+GBii1_#CyEo{<Vs!6",
+    "SECURE_AUTH_SALT": "N2_2B<+T|S5r16DE(v_`%C>=J;f)/` nv9pVa)^f`#IWW-7!s(eJ=_u$-VKA::qY",
+    "LOGGED_IN_SALT": "`Al#1a`s7B3{].pB8w8-/U!x2>n;UqT$XMD3_)O|:6EIPx)v(Jooec]:Dk$7|c.q",
+    "NONCE_SALT": "P[:Z$b[-C1|onp9!}/_MgHD4E Y|>6Co~+p>T:,CHWe7MBQ./|T|)Gcv|(Pau|[?"
+}
