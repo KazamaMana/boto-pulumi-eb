@@ -1,6 +1,7 @@
 import boto3
 
 ec2 = boto3.client('ec2')
+rds = boto3.client('rds')
 
 def createVpc():
     response = ec2.create_vpc(
@@ -23,21 +24,60 @@ def createInternetGateway(_vpc_id):
     print("internet gateway created!")
     print("")
 
+    return igw['InternetGateway']['InternetGatewayId']
+
 def createSubnets(_vpc_id):
     public_subnet = ec2.create_subnet(
         CidrBlock="10.0.0.0/17",
-        VpcId=_vpc_id
+        VpcId=_vpc_id,
+        AvailabilityZone="us-east-1a"
     )
 
     ec2.modify_subnet_attribute(
         MapPublicIpOnLaunch={'Value': True},
         SubnetId=public_subnet['Subnet']['SubnetId'])
 
-    private_subnet = ec2.create_subnet(
+    public_subnet_two = ec2.create_subnet(
         CidrBlock="10.0.128.0/17",
-        VpcId=_vpc_id
+        VpcId=_vpc_id,
+        AvailabilityZone="us-east-1b"
     )
+
+    ec2.modify_subnet_attribute(
+        MapPublicIpOnLaunch={'Value': True},
+        SubnetId=public_subnet_two['Subnet']['SubnetId'])
+
+    subnet_group = rds.create_db_subnet_group(
+        DBSubnetGroupDescription='eb-wp-rds-subnet-group',
+        DBSubnetGroupName='eb-wp-rds',
+        SubnetIds=[
+            public_subnet['Subnet']['SubnetId'],
+            public_subnet_two['Subnet']['SubnetId'],
+        ],
+    )
+
     print("subnets created!")
+    print("subnet group created!")
+    print("")
+
+def configRouteTable(_vpc_id, _igw_id):
+
+    route_table = ec2.describe_route_tables(
+        Filters=[
+            {
+                'Name': 'vpc-id',
+                'Values': [
+                    _vpc_id,
+                ]
+            }
+        ]
+    )
+    ec2.create_route(
+        DestinationCidrBlock='0.0.0.0/0',
+        GatewayId=_igw_id,
+        RouteTableId=route_table['RouteTables'][0]['Associations'][0]['RouteTableId'],
+    )
+    print("route table has been config")
     print("")
 
 def configSG(_vpc_id):
@@ -94,6 +134,7 @@ def configSG(_vpc_id):
         print(sg_ingress_rule)
 
 vpc_id = createVpc()
-createInternetGateway(vpc_id)
+igw_id = createInternetGateway(vpc_id)
 createSubnets(vpc_id)
+configRouteTable(vpc_id, igw_id)
 configSG(vpc_id)

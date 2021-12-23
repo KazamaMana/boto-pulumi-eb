@@ -8,7 +8,9 @@ class EbEnvSetting:
     list_settings: any
     subnets_ids: AwaitableGetSubnetIdsResult
 
-    def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict) -> None:
+    def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str) -> None:
+
+        self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
 
         self.list_settings=[
                 aws.elasticbeanstalk.EnvironmentSettingArgs(
@@ -22,9 +24,24 @@ class EbEnvSetting:
                     value="wordpress-deploy-elasticbeanstalk-ec2-role"
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:autoscaling:launchconfiguration",
+                    name="SecurityGroups",
+                    value=sg_id
+                ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:ec2:vpc",
-                    name="ELBScheme",
-                    value="internet facing"
+                    name="ELBSubnets",
+                    value="subnet-0d91347c5cae8784e"
+                ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:ec2:vpc",
+                    name="ELBSubnets",
+                    value="subnet-009717451db0ac979"
+                ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:elasticbeanstalk:environment",
+                    name="LoadBalancerType",
+                    value="application"
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:autoscaling:asg",
@@ -102,7 +119,6 @@ class EbEnvSetting:
                     value=salts_dict.get('NONCE_SALT')
                 )
             ]
-        self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
         for subnet in self.subnets_ids.ids:
             self.list_settings.append(
                 aws.elasticbeanstalk.EnvironmentSettingArgs(

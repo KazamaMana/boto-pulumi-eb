@@ -17,5 +17,5 @@ class ElasticBeanstalkBuilder:
         self.wp_env = aws.elasticbeanstalk.Environment(name + "-env",
             name=name + "-env",
             application=self.wp_app.name,
-            solution_stack_name="64bit Amazon Linux 2 v3.3.8 running PHP 8.0",
+            solution_stack_name="64bit Amazon Linux 2 v3.3.9 running PHP 8.0",
             settings=list_settings)
