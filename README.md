@@ -11,9 +11,7 @@ For all required modules you will need to set your [AWS credentials](https://www
 
 ## How to use this script 
 
-**Deploying VPC and their subnets, Security Groups, Route Tables, Internet Gateway**
-
-1.- Deploy the boto_network_builder.py script, this script will return a printed stringd with the ID of the VPC and Security Group, **save them for future reference**
+1.- Deploy the `boto_network_builder.py` script, this script will return a printed stringd with the ID of the VPC and Security Group, **save them for future reference**
 
 2.- Modify the `__main__.py` file and replace the `sg_id` & `vpc_id` variables with the ID's you got from the output of the first script.
 
@@ -28,9 +26,9 @@ For all required modules you will need to set your [AWS credentials](https://www
 
 5.- Upload your files through the EBCLI, to do so you need run `git init` on your wordpress root folder and from there run `eb init`, select zone and the option `[Create a new repository]`
 
- 6.- `eb deploy` and select the newly created application.
+ 6.- `eb deploy wp-eb-env` and select the newly created application.
 
 
 ## Troubleshooting/Destroying resources
 
-1.- 
+(wip)
