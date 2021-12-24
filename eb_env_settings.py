@@ -8,7 +8,7 @@ class EbEnvSetting:
     list_settings: any
     subnets_ids: AwaitableGetSubnetIdsResult
 
-    def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str) -> None:
+    def __init__(self, vpc_id: str, salts_dict, sg_id: str, eb_name: str) -> None:
 
         self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
 
@@ -21,27 +21,22 @@ class EbEnvSetting:
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:autoscaling:launchconfiguration",
                     name="IamInstanceProfile",
-                    value="wordpress-deploy-elasticbeanstalk-ec2-role"
+                    value=eb_name + "-ec2-instance-profile"
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:autoscaling:launchconfiguration",
                     name="SecurityGroups",
                     value=sg_id
                 ),
-                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                aws.elasticbeanstalk.EnvironmentSettingArgs(
                     namespace="aws:ec2:vpc",
-                    name="ELBSubnets",
-                    value="subnet-0d91347c5cae8784e"
+                    name="Subnets",
+                    value="subnet-009717451db0ac979, subnet-0d91347c5cae8784e"
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="ELBSubnets",
-                    value="subnet-009717451db0ac979"
-                ),
-                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                    namespace="aws:elasticbeanstalk:environment",
-                    name="LoadBalancerType",
-                    value="application"
+                    value="subnet-009717451db0ac979, subnet-0d91347c5cae8784e"
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:autoscaling:asg",
@@ -53,31 +48,31 @@ class EbEnvSetting:
                     name="MaxSize",
                     value="2"
                 ),
-                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                    namespace="aws:elasticbeanstalk:application:environment",
-                    name="RDS_HOSTNAME",
-                    value=eb_db.address
-                ),
+                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                #     namespace="aws:elasticbeanstalk:application:environment",
+                #     name="RDS_HOSTNAME",
+                #     value=eb_db.address
+                # ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:elasticbeanstalk:application:environment",
                     name="RDS_PORT",
                     value="3306"
                 ),
-                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                    namespace="aws:elasticbeanstalk:application:environment",
-                    name="RDS_DB_NAME",
-                    value=eb_db.name
-                ),
-                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                    namespace="aws:elasticbeanstalk:application:environment",
-                    name="RDS_PASSWORD",
-                    value=eb_db.password
-                ),
-                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                    namespace="aws:elasticbeanstalk:application:environment",
-                    name="RDS_USERNAME",
-                    value=eb_db.username
-                ),
+                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                #     namespace="aws:elasticbeanstalk:application:environment",
+                #     name="RDS_DB_NAME",
+                #     value=eb_db.name
+                # ),
+                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                #     namespace="aws:elasticbeanstalk:application:environment",
+                #     name="RDS_PASSWORD",
+                #     value=eb_db.password
+                # ),
+                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                #     namespace="aws:elasticbeanstalk:application:environment",
+                #     name="RDS_USERNAME",
+                #     value=eb_db.username
+                # ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:elasticbeanstalk:application:environment",
                     name="AUTH_KEY",
@@ -119,11 +114,18 @@ class EbEnvSetting:
                     value=salts_dict.get('NONCE_SALT')
                 )
             ]
-        for subnet in self.subnets_ids.ids:
-            self.list_settings.append(
-                aws.elasticbeanstalk.EnvironmentSettingArgs(
-                    namespace="aws:ec2:vpc",
-                    name="Subnets",
-                    value=subnet
-                )
-            )
+        # for subnet in self.subnets_ids.ids:
+        #     self.list_settings.append(
+        #         aws.elasticbeanstalk.EnvironmentSettingArgs(
+        #             namespace="aws:ec2:vpc",
+        #             name="Subnets",
+        #             value=subnet
+        #         )
+        #     )
+        #     self.list_settings.append(
+        #         aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+        #             namespace="aws:ec2:vpc",
+        #             name="ELBSubnets",
+        #             value=subnet
+        #         )
+        #     )

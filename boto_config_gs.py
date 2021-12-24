@@ -54,5 +54,5 @@ def set_ingress_rule(rds_sg, _eb_sg_id):
         print("Ingress rule not created...")
         print(response)
 
-eb_sg_id = look_for_eb_sg_id("vpc-03b57ac56786942ce", "wp-eb-env")
+eb_sg_id = look_for_eb_sg_id("vpc-03b57ac56786942ce", "wp-eb-rob-env")
 set_ingress_rule("sg-0e1c039bab019e6eb", eb_sg_id)

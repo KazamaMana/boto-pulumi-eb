@@ -1,9 +1,9 @@
 import pulumi_aws as aws
 import json
 
-def createRole() -> None:
-    eb_ec2_role = aws.iam.Role("wordpress-deploy-elasticbeanstalk-ec2-role",
-        name="wordpress-deploy-elasticbeanstalk-ec2-role",
+def createRole(eb_name: str) -> None:
+    eb_ec2_role = aws.iam.Role(eb_name + "-ec2-role",
+        name=eb_name + "-ec2-role",
         assume_role_policy=json.dumps({
             "Version": "2012-10-17",
             "Statement": [{
@@ -16,8 +16,8 @@ def createRole() -> None:
             }],
         }))
 
-    aws.iam.InstanceProfile("wp-deploy-eb-ec2-role", 
-        name="wordpress-deploy-elasticbeanstalk-ec2-role", 
+    aws.iam.InstanceProfile(eb_name + "-ec2-instance-profile", 
+        name=eb_name + "-ec2-instance-profile", 
         role=eb_ec2_role.name)
 
     aws.iam.PolicyAttachment("WebTier",
