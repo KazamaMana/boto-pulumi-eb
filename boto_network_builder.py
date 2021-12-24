@@ -55,10 +55,23 @@ def createSubnets(_vpc_id):
             public_subnet_two['Subnet']['SubnetId'],
         ],
     )
-
     print("subnets created!")
     print("subnet group created!")
     print("")
+
+def createPrivateSubnets(_vpc_id):
+    private_subnet_one = ec2.create_subnet(
+        CidrBlock="10.0.0.0/20",
+        VpcId=_vpc_id,
+        AvailabilityZone="us-east-1a"
+    )
+    private_subnet_two = ec2.create_subnet(
+        CidrBlock="10.0.128.0/20",
+        VpcId=_vpc_id,
+        AvailabilityZone="us-east-1b"
+    )
+    print("private subnet created")
+
 
 def configRouteTable(_vpc_id, _igw_id):
 
@@ -136,5 +149,6 @@ def configSG(_vpc_id):
 vpc_id = createVpc()
 igw_id = createInternetGateway(vpc_id)
 createSubnets(vpc_id)
+createPrivateSubnets(vpc_id)
 configRouteTable(vpc_id, igw_id)
 configSG(vpc_id)

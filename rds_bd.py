@@ -17,5 +17,6 @@ class DataBaseBuilder:
             parameter_group_name="default.mysql8.0",
             password=_password,
             skip_final_snapshot=True,
+            multi_az=True,
             username=user_name,
             db_subnet_group_name="eb-wp-rds")
