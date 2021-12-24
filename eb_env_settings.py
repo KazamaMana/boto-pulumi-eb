@@ -43,6 +43,11 @@ class EbEnvSetting:
                     value="subnet-009717451db0ac979, subnet-0d91347c5cae8784e"
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:elasticbeanstalk:environment",
+                    name="LoadBalancerType",
+                    value="application"
+                ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:autoscaling:asg",
                     name="MinSize",
                     value="1"
