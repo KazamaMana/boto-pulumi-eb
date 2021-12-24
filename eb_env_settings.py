@@ -1,7 +1,5 @@
 import pulumi_aws as aws
-from pulumi_aws.ec2 import vpc
 from pulumi_aws.ec2.get_subnet_ids import AwaitableGetSubnetIdsResult
-from pulumi_aws.ec2.vpc import Vpc
 
 class EbEnvSetting:
 
@@ -11,6 +9,10 @@ class EbEnvSetting:
     def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str, eb_name: str) -> None:
 
         self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
+
+        # 1. filtrar e identificar privados y publicos
+        # 2. formatear los subnets ordenador por privados y 
+        #   publicos en un string como este "subnet-1-public, subnet-2-public" y guardar en variable
 
         self.list_settings=[
                 aws.elasticbeanstalk.EnvironmentSettingArgs(
@@ -28,11 +30,13 @@ class EbEnvSetting:
                     name="SecurityGroups",
                     value=sg_id
                 ),
+                # aqui van los privados porque es el eb
                 aws.elasticbeanstalk.EnvironmentSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="Subnets",
                     value="subnet-009717451db0ac979, subnet-0d91347c5cae8784e"
                 ),
+                # aqui van los publicos porque es el lb
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="ELBSubnets",
