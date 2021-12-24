@@ -8,7 +8,7 @@ class EbEnvSetting:
     list_settings: any
     subnets_ids: AwaitableGetSubnetIdsResult
 
-    def __init__(self, vpc_id: str, salts_dict, sg_id: str, eb_name: str) -> None:
+    def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str, eb_name: str) -> None:
 
         self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
 
@@ -48,31 +48,31 @@ class EbEnvSetting:
                     name="MaxSize",
                     value="2"
                 ),
-                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                #     namespace="aws:elasticbeanstalk:application:environment",
-                #     name="RDS_HOSTNAME",
-                #     value=eb_db.address
-                # ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:elasticbeanstalk:application:environment",
+                    name="RDS_HOSTNAME",
+                    value=eb_db.address
+                ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:elasticbeanstalk:application:environment",
                     name="RDS_PORT",
                     value="3306"
                 ),
-                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                #     namespace="aws:elasticbeanstalk:application:environment",
-                #     name="RDS_DB_NAME",
-                #     value=eb_db.name
-                # ),
-                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                #     namespace="aws:elasticbeanstalk:application:environment",
-                #     name="RDS_PASSWORD",
-                #     value=eb_db.password
-                # ),
-                # aws.elasticbeanstalk.EnvironmentAllSettingArgs(
-                #     namespace="aws:elasticbeanstalk:application:environment",
-                #     name="RDS_USERNAME",
-                #     value=eb_db.username
-                # ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:elasticbeanstalk:application:environment",
+                    name="RDS_DB_NAME",
+                    value=eb_db.name
+                ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:elasticbeanstalk:application:environment",
+                    name="RDS_PASSWORD",
+                    value=eb_db.password
+                ),
+                aws.elasticbeanstalk.EnvironmentAllSettingArgs(
+                    namespace="aws:elasticbeanstalk:application:environment",
+                    name="RDS_USERNAME",
+                    value=eb_db.username
+                ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:elasticbeanstalk:application:environment",
                     name="AUTH_KEY",
