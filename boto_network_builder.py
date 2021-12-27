@@ -26,6 +26,9 @@ def createInternetGateway(_vpc_id):
 
     return igw['InternetGateway']['InternetGatewayId']
 
+# 2 privados mas
+# subnet group solo con un 1 privado
+
 def createSubnets(_vpc_id):
     public_subnet = ec2.create_subnet(        
         TagSpecifications=[

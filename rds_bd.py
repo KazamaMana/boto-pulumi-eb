@@ -4,6 +4,7 @@ class DataBaseBuilder:
 
     eb_db: aws.rds.Instance
 
+    # activar Multi-AZ
     def __init__(self, db_name: str, instance_size: str, _password: str, user_name) -> None:
         self.eb_db = aws.rds.Instance(db_name,
             allocated_storage=10,
