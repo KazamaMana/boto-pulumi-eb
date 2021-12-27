@@ -19,4 +19,5 @@ class DataBaseBuilder:
             password=_password,
             skip_final_snapshot=True,
             username=user_name,
-            db_subnet_group_name="eb-wp-rds")
+            db_subnet_group_name="eb-wp-rds",
+            multi_az=True)

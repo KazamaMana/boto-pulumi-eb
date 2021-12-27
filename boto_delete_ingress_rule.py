@@ -1,4 +1,5 @@
 import boto3
+import os
 
 ec2 = boto3.client('ec2')
 
@@ -41,5 +42,5 @@ def remove_ingress_rule(sg_default, _eb_sg_id):
     }])
     print("ingress rule deleted")
     
-eb_sg_id=look_for_eb_sg_id("vpc-03b57ac56786942ce", "wp-eb-rob-env")
-remove_ingress_rule("sg-0e1c039bab019e6eb", eb_sg_id)
+eb_sg_id=look_for_eb_sg_id(os.environ.get("EB_VPC_ID"), os.environ.get("EB_NAME") + "-env")
+remove_ingress_rule(os.environ.get("EB_RDS_SG_ID"), eb_sg_id)

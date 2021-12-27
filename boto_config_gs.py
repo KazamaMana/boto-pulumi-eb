@@ -1,4 +1,5 @@
 import boto3
+import os
 
 ec2 = boto3.client('ec2')
 
@@ -54,5 +55,5 @@ def set_ingress_rule(rds_sg, _eb_sg_id):
         print("Ingress rule not created...")
         print(response)
 
-eb_sg_id = look_for_eb_sg_id("vpc-00fcd97ae96cce58c", "wp-eb-rob-env")
-set_ingress_rule("sg-07716f1761a895b86", eb_sg_id)
+eb_sg_id = look_for_eb_sg_id(os.environ.get("EB_VPC_ID"), os.environ.get("EB_NAME") + "-env")
+set_ingress_rule(os.environ.get("EB_RDS_SG_ID"), eb_sg_id)

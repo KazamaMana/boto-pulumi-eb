@@ -31,7 +31,7 @@ def createInternetGateway(_vpc_id):
 
 def createSubnets(_vpc_id):
     public_subnet = ec2.create_subnet(
-        CidrBlock="10.0.0.0/17",
+        CidrBlock="10.0.0.0/18",
         VpcId=_vpc_id,
         AvailabilityZone="us-east-1a"
     )
@@ -41,7 +41,7 @@ def createSubnets(_vpc_id):
         SubnetId=public_subnet['Subnet']['SubnetId'])
 
     public_subnet_two = ec2.create_subnet(
-        CidrBlock="10.0.128.0/17",
+        CidrBlock="10.0.64.0/18",
         VpcId=_vpc_id,
         AvailabilityZone="us-east-1b"
     )
@@ -50,16 +50,32 @@ def createSubnets(_vpc_id):
         MapPublicIpOnLaunch={'Value': True},
         SubnetId=public_subnet_two['Subnet']['SubnetId'])
 
+    private_subnet = ec2.create_subnet(
+        CidrBlock="10.0.128.0/18",
+        VpcId=_vpc_id,
+        AvailabilityZone="us-east-1a"
+    )
+
+    private_subnet_two = ec2.create_subnet(
+        CidrBlock="10.0.192.0/18",
+        VpcId=_vpc_id,
+        AvailabilityZone="us-east-1b"
+    )
+
     subnet_group = rds.create_db_subnet_group(
         DBSubnetGroupDescription='eb-wp-rds-subnet-group',
         DBSubnetGroupName='eb-wp-rds',
         SubnetIds=[
-            public_subnet['Subnet']['SubnetId'],
-            public_subnet_two['Subnet']['SubnetId'],
+            private_subnet['Subnet']['SubnetId'],
+            private_subnet_two['Subnet']['SubnetId']
         ],
     )
 
     print("subnets created!")
+    print("public_subnet_one: " + public_subnet['Subnet']['SubnetId'])
+    print("public_subnet_two: " + public_subnet_two['Subnet']['SubnetId'])
+    print("private_subnet_one: " + private_subnet['Subnet']['SubnetId'])
+    print("private_subnet_two: " + private_subnet_two['Subnet']['SubnetId'])
     print("subnet group created!")
     print("")
 
