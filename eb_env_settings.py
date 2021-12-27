@@ -4,7 +4,6 @@ from pulumi_aws.ec2.get_subnet_ids import AwaitableGetSubnetIdsResult
 class EbEnvSetting:
 
     list_settings: any
-    subnets_ids: AwaitableGetSubnetIdsResult
 
     def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str, eb_name: str, private_subnet_ids: str, public_subnet_ids: str) -> None:
 
@@ -30,7 +29,7 @@ class EbEnvSetting:
                     name="SecurityGroups",
                     value=sg_id
                 ),
-                # aqui van los privados porque es el eb
+                # aqui van los privados porque es el env
                 aws.elasticbeanstalk.EnvironmentSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="Subnets",

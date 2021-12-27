@@ -6,6 +6,7 @@ from eb_env_settings import EbEnvSetting
 import pulumi_aws as aws
 
 import json
+import os
 
 with open("salts.json","r") as f:
     salts_dict = json.load(f)
@@ -33,5 +34,6 @@ print(public_subnet)
 
 createRole("wp-eb-rob")
 class_db = DataBaseBuilder("wpeb", "db.t3.micro", "wordpress", "wordpress")
-class_list_settings = EbEnvSetting(vpc_id, class_db.eb_db, salts_dict, sg_id, eb_name)
+class_list_settings = EbEnvSetting(vpc_id, class_db.eb_db, salts_dict, sg_id, eb_name,
+    env_subnets, lb_subnets)
 eb = ElasticBeanstalkBuilder(eb_name, class_list_settings.list_settings)
