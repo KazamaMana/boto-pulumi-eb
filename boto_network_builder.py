@@ -27,7 +27,18 @@ def createInternetGateway(_vpc_id):
     return igw['InternetGateway']['InternetGatewayId']
 
 def createSubnets(_vpc_id):
-    public_subnet = ec2.create_subnet(
+    public_subnet = ec2.create_subnet(        
+        TagSpecifications=[
+        {
+            'ResourceType': 'subnet',
+            'Tags': [
+                {
+                    'Key': 'Type',
+                    'Value': 'Public'
+                }
+            ]
+        },
+    ],
         CidrBlock="10.0.0.0/17",
         VpcId=_vpc_id,
         AvailabilityZone="us-east-1a"
@@ -38,6 +49,17 @@ def createSubnets(_vpc_id):
         SubnetId=public_subnet['Subnet']['SubnetId'])
 
     public_subnet_two = ec2.create_subnet(
+                TagSpecifications=[
+        {
+            'ResourceType': 'subnet',
+            'Tags': [
+                {
+                    'Key': 'Type',
+                    'Value': 'Public'
+                }
+            ]
+        },
+    ],
         CidrBlock="10.0.128.0/17",
         VpcId=_vpc_id,
         AvailabilityZone="us-east-1b"
@@ -61,11 +83,33 @@ def createSubnets(_vpc_id):
 
 def createPrivateSubnets(_vpc_id):
     private_subnet_one = ec2.create_subnet(
+        TagSpecifications=[
+        {
+            'ResourceType': 'subnet',
+            'Tags': [
+                {
+                    'Key': 'Type',
+                    'Value': 'Private'
+                }
+            ]
+        },
+    ],
         CidrBlock="10.0.0.0/20",
         VpcId=_vpc_id,
         AvailabilityZone="us-east-1a"
     )
     private_subnet_two = ec2.create_subnet(
+        TagSpecifications=[
+        {
+            'ResourceType': 'subnet',
+            'Tags': [
+                {
+                    'Key': 'Type',
+                    'Value': 'Private'
+                }
+            ]
+        },
+    ],
         CidrBlock="10.0.128.0/20",
         VpcId=_vpc_id,
         AvailabilityZone="us-east-1b"

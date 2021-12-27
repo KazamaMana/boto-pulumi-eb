@@ -6,9 +6,9 @@ class EbEnvSetting:
     list_settings: any
     subnets_ids: AwaitableGetSubnetIdsResult
 
-    def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str, eb_name: str) -> None:
+    def __init__(self, vpc_id: str, eb_db: aws.rds.Instance, salts_dict, sg_id: str, eb_name: str, private_subnet_ids: str, public_subnet_ids: str) -> None:
 
-        self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
+        # self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
 
         # 1. filtrar e identificar privados y publicos
         # 2. formatear los subnets ordenador por privados y 
@@ -34,13 +34,13 @@ class EbEnvSetting:
                 aws.elasticbeanstalk.EnvironmentSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="Subnets",
-                    value="subnet-009717451db0ac979, subnet-0d91347c5cae8784e"
+                    value=private_subnet_ids
                 ),
                 # aqui van los publicos porque es el lb
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="ELBSubnets",
-                    value="subnet-009717451db0ac979, subnet-0d91347c5cae8784e"
+                    value=public_subnet_ids
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:autoscaling:asg",
