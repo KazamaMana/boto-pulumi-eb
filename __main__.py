@@ -11,28 +11,16 @@ import os
 with open("salts.json","r") as f:
     salts_dict = json.load(f)
 
-eb_name = "wp-eb-rob"
-vpc_id = "vpc-0a740f406904bcc81"
-sg_id = "sg-07716f1761a895b86"
+with open("salts.json","r") as f:
+    salts_dict = json.load(f)
 
+eb_name = os.environ.get("EB_NAME")
+vpc_id = os.environ.get("EB_VPC_ID")
+sg_id = os.environ.get("EB_RDS_SG_ID")
+env_subnets = "subnet-02e5d5ec1f202811e, subnet-081e7f228051433b2" #privates
+lb_subnets = "subnet-014730c82b5781e84, subnet-0618225b91041e6ee" #publics
 
-private_subnet = []
-public_subnet = []
-
-def public_subnet_retrieve(_vpc_ids: str) -> public_subnet:
-    _public_subnet_ids = aws.ec2.get_subnet_ids(vpc_id=_vpc_ids,
-                                                tags={"Type": "Public"}).ids
-
-def private_subnet_retrieve(_vpc_ids: str) -> public_subnet:
-        _private_subnet_ids = aws.ec2.get_subnet_ids(vpc_id=_vpc_ids,
-                                                tags={"Type": "Private"}).ids
-
-private_subnet = private_subnet_retrieve(vpc_id)
-public_subnet = public_subnet_retrieve(vpc_id)
-
-print(public_subnet)
-
-createRole("wp-eb-rob")
+createRole(eb_name)
 class_db = DataBaseBuilder("wpeb", "db.t3.micro", "wordpress", "wordpress")
 class_list_settings = EbEnvSetting(vpc_id, class_db.eb_db, salts_dict, sg_id, eb_name,
     env_subnets, lb_subnets)
