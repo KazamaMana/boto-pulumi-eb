@@ -9,10 +9,6 @@ class EbEnvSetting:
 
         # self.subnets_ids = aws.ec2.get_subnet_ids(vpc_id=vpc_id)
 
-        # 1. filtrar e identificar privados y publicos
-        # 2. formatear los subnets ordenador por privados y 
-        #   publicos en un string como este "subnet-1-public, subnet-2-public" y guardar en variable
-
         self.list_settings=[
                 aws.elasticbeanstalk.EnvironmentSettingArgs(
                     namespace="aws:ec2:vpc",
@@ -39,7 +35,7 @@ class EbEnvSetting:
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:ec2:vpc",
                     name="ELBSubnets",
-                    value=public_subnet_ids
+                    value=public_subnet_ids + private_subnet_ids
                 ),
                 aws.elasticbeanstalk.EnvironmentAllSettingArgs(
                     namespace="aws:elasticbeanstalk:environment",
